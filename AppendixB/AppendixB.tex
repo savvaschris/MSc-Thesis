@@ -1,0 +1,38 @@
+\chapter{Tool setup guides}
+\label{chap:tools-setup}
+
+\emph{OpenCV}
+
+\begin{itemize}
+\item Download OpenCV for Windows from opencv.org. (Windows, Linux/Mac, Android, iOS versions available).
+\item You can download pre-compiled libraries (hosted on Sourceforge) or clone latest source (hosted on Github), make project with CMake and compile with Visual Studio.
+\item Manual compilation will allow flags to be set for usage of extra features such as CUDA and OpenNI interfaces (see OpenCV documentation). For OpenNI (v1) support OpenCV must be compiled with Visual Studio 2010.
+\item Set enviromental variables and create property sheets in Visual studio (see opencv.org documentation).
+\item For installation in other environments see opencv.org documentation.
+\end{itemize}
+
+\par
+\emph{OpenNI}
+\begin{itemize}
+\item For v1 clone source from github.com/OpenNI/OpenNI and compile with Visual Studio 2010. Run bat file for usb drivers.
+\item For v2 download the Kinect SDK, install it and then download OpenNI 2 from structure.io/openni or other from sources online (official website shut down as of April 2014) and install it. OpenNI 2 works with Kinect SDK drivers so uninstall any other drivers. You could also clone the source from github.com/OpenNI/OpenNI2.
+\item OpenCV's built in interface for OpenNI is for v1.
+\item For v2 interfaces should be created manually or cloned from github.com/masad801/OpenCVKinect (Give credit to the author).
+\item Set enviromental variables and create property sheets in Visual Studio.
+\end{itemize}
+
+\par
+\emph{EMGU}
+\begin{itemize}
+\item Download EMGU from www.emgu.com (requires Visual Studio and .Net).
+\item Add references to EMGU in Visual Studio project (see emgu.com documentation).
+\end{itemize}
+
+\par
+\emph{Kinect SDK}
+\begin{itemize}
+\item Download and install the Kinect SDK from \newline www.microsoft.com/en-us/kinectforwindowsdev/Downloads.aspx
+\item Download and install the Kinect for Windows Developer Toolkit from \newline www.microsoft.com/en-us/download/details.aspx?id=40276
+\end{itemize}
+
+\par (All links accessed in May 2014)

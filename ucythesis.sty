@@ -1,0 +1,821 @@
+%
+%   ********************************************************************
+%   * This is a UCY thesis format style file that has been hacked      *
+%   * from thesis style files from NYU, UPenn, Stanford and UConn.     *
+%   * It is currently fairly robust for normal type sizes of 11 and 12 *
+%   * pts. Report any problems to Dr. Chryssis Georgiou, Department of *
+%		* Computer Science, University of Cyprus (chryssis@cs.ucy.ac.cy).  *
+%   ********************************************************************
+%
+\typeout{Option Style `ucythesis' <04 July 2005>.}
+
+% Specify the default pagestyle for thesis.
+\marginparwidth 40pt  \marginparsep 10pt
+\oddsidemargin 0.55in \evensidemargin 0.55in
+\topmargin -36pt      \footskip 36pt
+%%
+%% The UCY-CS department requirements call for a 1.5in minimum left margin and 
+%% 1in minimum top, bottom and right margins.  
+%%
+%\textheight 8.7in     \textwidth 5.7in	% Use if text offset by 0.2in on left
+\textheight 8.9in     \textwidth 5.9in	% Use if text not offset on left
+
+\def\topfraction{.7}  \def\bottomfraction{.3}
+\def\textfraction{.2} \def\floatpagefraction{.5}
+
+\newcounter{ucy@pagenum}
+\def\baselinestretch{2}
+\rm
+
+\brokenpenalty=10000
+\widowpenalty=10000
+\clubpenalty=10000
+
+% Macro for single, double, triple and variable spacing
+\def\singlespace{\def\baselinestretch{1}
+  		 \ifx\@currsize\normalsize\@normalsize\else\@currsize\fi}
+\def\doublespace{\def\baselinestretch{2}
+  		 \ifx\@currsize\normalsize\@normalsize\else\@currsize\fi}
+\def\triplespace{\def\baselinestretch{3}
+  		 \ifx\@currsize\normalsize\@normalsize\else\@currsize\fi}
+\def\varyspace#1{\def\baselinestretch{#1}
+  		 \ifx\@currsize\normalsize\@normalsize\else\@currsize\fi}
+
+
+% New chapter header macro.
+\def\@makechapterhead#1{
+  \vspace*{50pt}
+  { \parindent 0pt \raggedright 
+    \ifnum \c@secnumdepth >\m@ne
+        \LARGE\bf 
+	\begin{center}
+	  \@chapapp{} \thechapter \par
+	\end{center}
+	\vskip 20pt
+    \fi
+    \Large \bf 
+    \begin{center}
+	  #1\par 
+    \end{center}
+    \nobreak \vskip 40pt
+  }
+}
+
+
+% Redefine the chapter and appendix entries in the table 
+% of contents now to include "Chapter" or "Appendix".
+\def\@chapter[#1]#2{
+  \ifnum \c@secnumdepth >\m@ne
+    \refstepcounter{chapter}
+    \typeout{\@chapapp\space\thechapter.}
+    \addcontentsline{toc}{chapter}{
+                \protect\hskip-5pt\numberline{\@chapapp\space\thechapter: }#1
+		}
+  \else
+    \addcontentsline{toc}{chapter}{#1}
+  \fi
+  \chaptermark{#1}
+  \addtocontents{lof}{\protect\addvspace{10pt}}
+  \addtocontents{lot}{\protect\addvspace{10pt}}
+  \if@twocolumn
+    \@topnewpage[\@makechapterhead{#2}] 
+  \else
+    \@makechapterhead{#2}
+    \@afterheading
+  \fi
+}
+
+
+% Redefine the type size of section and subsection headings within a chapter.
+\def\section{
+  \@startsection {section}{1}{\z@}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}{\normalsize\bf}
+  }
+\def\subsection{
+  \@startsection{subsection}{2}{\z@}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}{\normalsize\bf}
+  }
+\def\subsubsection{
+  \@startsection{subsubsection}{3}{\z@}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}{\normalsize\bf}
+  }
+\def\paragraph{
+  \@startsection{paragraph}{4}{\z@}{3.25ex plus 1ex minus .2ex}{2.3ex plus .2ex}{\normalsize\bf}
+}
+\def\subparagraph{
+  \@startsection{subparagraph}{4}{\parindent}{3.25ex plus 1ex minus .2ex}{-1em}{\normalsize\bf}
+}
+
+
+\def\@ifbang#1#2{\@ifnextchar !{\def\@tempa!{#1}\@tempa}{#2}}
+\def\@ifplus#1#2{\@ifnextchar +{\def\@tempa+{#1}\@tempa}{#2}}
+
+
+\def\@startsection#1#2#3#4#5#6{\if@noskipsec \leavevmode \fi
+   \par \@tempskipa #4\relax
+   \@afterindenttrue
+   \ifdim \@tempskipa <\z@ \@tempskipa -\@tempskipa \@afterindentfalse\fi
+   \if@nobreak
+     \everypar{}
+   \else
+     \addpenalty{\@secpenalty}\addvspace{\@tempskipa}
+   \fi
+   \@ifbang{\@ifnextchar [{\@bsect{#1}{#2}{#3}{#4}{#5}{#6}}
+			  {\@dblarg{\@bsect{#1}{#2}{#3}{#4}{#5}{#6}}}}
+	   {\@ifstar{\@ssect{#3}{#4}{#5}{#6}}
+	            {\@ifplus{\@dblarg{\@psect{#1}{#2}{#3}{#4}{#5}{#6}}}
+			     {\@dblarg{\@sect{#1}{#2}{#3}{#4}{#5}{#6}}}}}
+}
+ 
+
+% Subsubsections will now be numbered in the table of contents.
+% Paragraphs and subparagraphs excluded from the table of contents.
+%
+% FORMAT: \@sect{NAME}{LEVEL}{INDENT}{BEFORESKIP}{AFTERSKIP}{STYLE}[ARG1]{ARG2}
+%
+\setcounter{secnumdepth}{3}
+\def\@sect#1#2#3#4#5#6[#7]#8{
+  \ifnum #2> \c@secnumdepth
+    \def\@svsec{}
+  \else 
+    \refstepcounter{#1}\edef\@svsec{\csname the#1\endcsname\hskip 1em }
+  \fi  % end ifnum
+  \@tempskipa #5\relax
+  \ifdim \@tempskipa>\z@ 
+    \begingroup #6\relax
+      \@hangfrom{\hskip #3\relax\@svsec}{\interlinepenalty \@M #8\par}
+    \endgroup
+    \ifnum #2 < \c@secnumdepth
+      \csname #1mark\endcsname{#7}
+      \addcontentsline{toc}{#1}{\ifnum #2>\c@secnumdepth 
+	                        \else
+				   \protect\numberline{\csname the#1\endcsname}\fi{\ignorespaces #7}}
+    \fi
+  \else
+    \def\@svsechd{#6\hskip #3\@svsec #8\csname #1mark\endcsname{#7}
+                  \ifnum #2 < \c@secnumdepth
+                     \addcontentsline{toc}{#1}{
+	                         \ifnum #2>\c@secnumdepth 
+	                         \else
+				    \protect\numberline{\csname the#1\endcsname}\fi{\ignorespaces #7}}
+	          \fi}
+  \fi % end ifdim
+  \@xsect{#5}
+}
+
+%% For `\{sub,subsub}section!{TITLE}': Add to TOC; Don't print section number
+\def\@bsect#1#2#3#4#5#6[#7]#8{\def\@svsec{}
+     \refstepcounter{#1}
+     \@tempskipa #5\relax
+      \ifdim \@tempskipa>\z@
+        \begingroup #6\relax
+          \@hangfrom{\hskip #3\relax\@svsec}{\interlinepenalty \@M #8\par}%
+        \endgroup
+       \csname #1mark\endcsname{#7}\addcontentsline
+         {toc}{#1}{#7}\else
+        \def\@svsechd{#6\hskip #3\@svsec #8\csname #1mark\endcsname
+                      {#7}\addcontentsline{toc}{#1}{#7}}\fi
+     \@xsect{#5}}
+
+%% For `\{sub,subsub}section+{TITLE}': Don't add to TOC; Print section number
+\def\@psect#1#2#3#4#5#6[#7]#8{\refstepcounter{#1}
+     \edef\@svsec{\csname the#1\endcsname\hskip 1em}
+     \@tempskipa #5\relax
+      \ifdim \@tempskipa>\z@
+        \begingroup #6\relax
+          \@hangfrom{\hskip #3\relax\@svsec}{\interlinepenalty \@M #8\par}%
+        \endgroup
+       \else
+        \def\@svsechd{#6\hskip #3\@svsec #8\csname #1mark\endcsname{#7}}\fi
+     \@xsect{#5}}
+
+
+
+% Redefine indentation for entries in Table of Contents
+%
+% \@dottedtocline{LEVEL}{INDENT}{NUMWIDTH}{TITLE}{PAGE}
+%
+%%\def\@dottedtocline#1#2#3#4#5{
+%%  \vskip \z@ plus .2pt
+%%  {\hskip #2 \rightskip \@tocrmarg \parfillskip -\rightskip
+%%   \parindent #2\relax\@afterindenttrue
+%%   \interlinepenalty\@M
+%%   \leavevmode
+%%   \@tempdima #3\relax
+%%   #4\nobreak\leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern \@dotsep mu$}
+%%   \hfill \nobreak \hbox to\@pnumwidth{\hfil\rm #5}\par
+%%  }
+%%}
+\def\@dottedtocline#1#2#3#4#5{
+  \vskip \z@ plus .2pt
+  {\hskip #2
+   \hangafter 1 \hangindent #2\relax \advance\hangindent #3\relax
+   \rightskip \@tocrmarg \parfillskip -\rightskip
+   \parindent #2\relax\@afterindenttrue
+   \interlinepenalty\@M
+   \leavevmode
+   \@tempdima #3\relax
+   #4\nobreak\leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern \@dotsep mu$}
+   \hfill \nobreak \hbox to\@pnumwidth{\hfil\rm #5}\par
+  }
+}
+
+% Extracted from Dec. 1990 version of `latex.tex'  (Before 25 Jan 88 change,
+%			it also added \@tempdima to the hanging indentation.)
+%
+% \numberline{NUMBER}
+%
+
+\def\numberline#1{\hbox to\@tempdima{#1\hfil}}
+
+
+% Redefine the indentation for the title of a
+% chapter/appendix entry in the table of contents.
+\def\l@chapter#1#2{
+  \pagebreak[3] 
+  \vskip 1.0em plus 1pt \@tempdima 7em
+  \begingroup
+    \hangafter 1 \hangindent \@tempdima\relax
+    \parindent \z@ \rightskip \@pnumwidth 
+    \parfillskip -\@pnumwidth 
+    \bf \leavevmode #1\hfill\hbox to\@pnumwidth{\hss #2}\par
+ \endgroup
+}
+
+
+% Table-Of-Contents FORMAT:    \TOCFORMAT{format}
+%  	  format = 0 -> default
+%  	  	   1 -> main body entries
+%  	 	   2 -> appendix entries
+\def\tocformat#1{\ifcase#1
+       %% Default format 
+	\def\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
+	\def\l@subsection{\@dottedtocline{2}{3.8em}{3.2em}}
+	\def\l@subsubsection{\@dottedtocline{3}{7em}{4.1em}}
+	\def\l@paragraph{\@dottedtocline{4}{10em}{5em}}
+	\def\l@subparagraph{\@dottedtocline{5}{12em}{6em}}
+     \or
+       %% Format for entries from the main body of the thesis
+       %%			(as per UConn Graduate School request)
+	\def\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
+	\def\l@subsection{\@dottedtocline{2}{3.8em}{3.2em}}
+	\def\l@subsubsection{\@dottedtocline{3}{3.8em}{4.1em}}
+	\def\l@paragraph{\@dottedtocline{4}{3.8em}{5em}}
+	\def\l@subparagraph{\@dottedtocline{5}{3.8em}{6em}}
+     \or
+       %% Format for entries from the apendix sections of the thesis
+       %%			(as per UConn Graduate School request)
+	\def\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
+	\def\l@subsection{\@dottedtocline{2}{1.5em}{3.2em}}
+	\def\l@subsubsection{\@dottedtocline{3}{1.5em}{4.1em}}
+	\def\l@paragraph{\@dottedtocline{4}{1.5em}{5em}}
+	\def\l@subparagraph{\@dottedtocline{5}{1.5em}{6em}}
+     \else
+	\typeout{Unknown TOC format. Ignoring.}
+     \fi
+}
+	
+
+% Initialize appendix prefix for appendix entries in toc.
+\def\@tocchapapp{}
+
+
+% Redefine macro for appendices
+% Enforce single spacing for remainder of thesis
+\def\postmatter{
+  \addtocontents{toc}{\protect\tocformat{2}}
+  \par
+  \singlespace
+  \setcounter{chapter}{0}
+  \setcounter{section}{0}
+  \def\@chapapp{Appendix}
+  \let\@tocchapapp\@chapapp
+  \def\thechapter{\Alph{chapter}}
+}
+
+
+% Stuff found in the Stanford thesis style.
+\def\cl@chapter{\@elt{section}\@elt{footnote}}
+\def\theequation{\arabic{equation}}
+
+% Stuff for floats
+
+\long\def\@makecaptiontop#1#2{
+ \setbox\@tempboxa\hbox{#1: #2}
+ \ifdim \wd\@tempboxa >\hsize #1: #2\par \else \hbox
+to\hsize{\hfil\box\@tempboxa\hfil} 
+ \fi
+ \vskip 10pt}
+
+\long\def\@makecaptionbottom#1#2{
+ \vskip 10pt 
+ \setbox\@tempboxa\hbox{#1: #2}
+ \ifdim \wd\@tempboxa >\hsize #1: #2\par \else \hbox
+to\hsize{\hfil\box\@tempboxa\hfil} 
+ \fi}
+
+\let\@makecaption\@makecaptionbottom
+
+\def\thefigure{\@arabic\c@figure}
+\def\figure{\let\@makecaption\@makecaptionbottom\@float{figure}}
+\@namedef{figure*}{\let\@makecaption\@makecaptionbottom\@dblfloat{figure}}
+
+\def\thetable{\@arabic\c@table}
+\def\table{\let\@makecaption\@makecaptiontop\@float{table}}
+\@namedef{table*}{\let\@makecaption\@makecaptiontop\@dblfloat{table}}
+
+\def\@xfloat#1[#2]{
+  \def\@captype{#1}
+  \ifhmode \@bsphack\@floatpenalty -\@Mii \else \@floatpenalty-\@Miii \fi
+  \ifinner
+    \@parmoderr\@floatpenalty\z@
+  \else
+    \@next\@currbox\@freelist{
+       \@tempcnta\csname ftype@#1\endcsname
+       \multiply\@tempcnta\@xxxii\advance\@tempcnta\sixt@@n
+       \@tfor \@tempa :=#2\do
+			{\if\@tempa h\advance\@tempcnta \@ne\fi
+                         \if\@tempa t\advance\@tempcnta \tw@\fi
+                         \if\@tempa b\advance\@tempcnta 4\relax\fi
+                         \if\@tempa p\advance\@tempcnta 8\relax\fi
+                        }
+       \global\count\@currbox\@tempcnta
+    }
+    \@fltovf
+  \fi
+  \global\setbox\@currbox\vbox\bgroup 
+  \def\baselinestretch{1}	
+  \ifx\@currsize\normalsize\@normalsize\else\@currsize\fi
+  \boxmaxdepth\z@
+  \hsize\columnwidth
+  \@parboxrestore
+}
+\long\def\@footnotetext#1{
+  \insert\footins{\def\baselinestretch{1}	 %% Change to single spacing 
+		  \footnotesize
+                  \interlinepenalty\interfootnotelinepenalty 
+                  \splittopskip\footnotesep
+                  \splitmaxdepth \dp\strutbox
+		  \floatingpenalty \@MM
+                  \hsize\columnwidth
+		  \@parboxrestore
+                  \edef\@currentlabel{\csname p@footnote\endcsname\@thefnmark}
+		  \@makefntext{\rule{\z@}{\footnotesep}\ignorespaces #1\strut}
+		 }
+}
+
+\def\includechapternumber#1{\@newctr{#1}[chapter]\@namedef{the#1}{\thechapter.\arabic{#1}}}
+
+% QUOTE and QUOTATION environments
+\def\quotation{\par\list{}{\listparindent 1.5em
+    \itemindent\listparindent
+    \rightmargin\leftmargin\parsep 0pt plus 1pt
+    \def\baselinestretch{1}	 %% Change to single spacing
+    \ifx\@currsize\normalsize\@normalsize\else\@currsize\fi}\item[]}
+\def\endquotation{\endlist\par\vskip-\lastskip}
+\def\quote{\par\list{}{\rightmargin\leftmargin
+    \def\baselinestretch{1}	 %% Change to single spacing 
+    \ifx\@currsize\normalsize\@normalsize\else\@currsize\fi}\item[]}
+\def\endquote{\endlist\par\vskip-\lastskip}
+
+
+% SINGLE environment				
+\def\single{\trivlist \baselineskip 13.6pt
+    \def\baselinestretch{1}
+    \ifx\@currsize\normalsize\@normalsize\else\@currsize\fi\item[]}
+\def\endsingle{\endtrivlist}
+
+
+% OUTLINE
+%  Outlining is done with four counters: outli, outlii, outliii, outliv,
+%  of outlining.  The label is generated by the commands \labeloutli 
+%  ... \labeloutlv.  \labeloutlv, which should be defined by the
+%  document style.  The expansion of \p@outlN\theoutlN defines the output
+%  of a \ref command.
+
+\newcount\@outldepth \@outldepth = 0
+
+\@definecounter{outli}
+\@definecounter{outlii}
+\@definecounter{outliii}
+\@definecounter{outliv}
+\@definecounter{outlv}
+\def\labeloutli{\theoutli.}    
+\def\theoutli{\Roman{outli}}     
+\def\labeloutlii{\theoutlii.}
+\def\theoutlii{\Alph{outlii}}
+\def\p@outlii{\theoutli}
+\def\labeloutliii{\theoutliii.}
+\def\theoutliii{\arabic{outliii}}
+\def\p@outliii{\theoutli\theoutlii}
+\def\labeloutliv{(\theoutliv)}
+\def\theoutliv{\alph{outliv}}     
+\def\p@outliv{\p@outliii\theoutliii}
+\def\labeloutlv{(\theoutlv)}
+\def\theoutlv{\roman{outlv}}     
+\def\p@outlv{\p@outliv(\theoutliv)}
+
+\def\outline{\ifnum \@outldepth >4 \@toodeep\else
+      \advance\@outldepth \@ne 
+      \edef\@outlctr{outl\romannumeral\the\@outldepth}\list
+      {\csname label\@outlctr\endcsname}{\usecounter
+        {\@outlctr}\def\makelabel##1{\hss\llap{##1}}}\fi}
+\let\endoutline =\endlist
+
+
+% Macros for the title and approval pages.
+\newskip\advisersep \advisersep 0.2in plus 0.2in
+\newskip\advisersheight \advisersheight 4.5in 
+\newinsert\ucy@advisers \dimen\ucy@advisers \advisersheight
+\def\majoradviser#1{
+   \insert\ucy@advisers{\vskip 0.2in plus 0.3in \sigmajor{Research Supervisor}{#1}}
+}
+\def\associateadviser#1{
+   \insert\ucy@advisers{\vskip\advisersep \sigassoc{Committee Member}{#1}}
+}
+\let\principaladviser\majoradviser
+\let\firstreader\associateadviser
+\let\secondreader\associateadviser
+\def\fulldegs#1{\gdef\@fulldegs{#1}}  % Full degree specifications 
+\def\degs#1{\gdef\@degs{#1}}          % Short degree specs
+\def\copyrightyear#1{\gdef\@copyrightyear{#1}} 
+\def\title#1{\gdef\@title{\uppercase{#1}}}
+\def\@author{}
+\def\monthcom#1{\gdef\@monthcom{#1}}
+
+\ifnum\month=12
+    \@tempcnta=\year \advance\@tempcnta by 1
+    \gdef\@copyrightyear{\the\@tempcnta}
+\else
+    \gdef\@copyrightyear{\the\year}
+\fi
+
+\newif\ifcopyright 
+\newif\iffigurespage 
+%\newif\iftablespage
+\copyrightfalse 
+\figurespagetrue 
+%\tablespagetrue
+
+% Conditionals for either PhD, MS, or MA thesis.
+\newif\ifphdform         % Specify Phd thesis format
+\newif\ifmsform          % Specify MS thesis format
+\newif\ifmaform          % Specify MA thesis format
+\phdformfalse
+\msformfalse
+\maformfalse
+
+\def\phddissertation{
+	\def\@Degree{Doctor of Philosophy}
+	\def\@DegreeAbrv{Ph.D.}
+	\def\@DocType{Dissertation}
+	\phdformtrue
+	\copyrighttrue 
+}
+\let\phdthesis\phddissertation
+
+%It can also be used for Master degree thesis
+\def\msthesis{
+	\def\@Degree{Master of Science}
+	\def\@DegreeAbrv{M.S.}
+	\def\@DocType{Thesis}
+	\msformtrue
+}
+
+\def\mathesis{
+	\def\@Degree{Master of Arts}
+	\def\@DegreeAbrv{M.A.}
+	\def\@DocType{Thesis}
+	\msformtrue
+}
+
+
+% Title page macro.
+\def\titlep{%
+	\thispagestyle{empty}%
+	\null\vskip1in%
+	\begin{center}
+		{\expandafter{\bf\@title}}
+	\end{center}
+	\vspace*{.5in}
+	{\singlespace
+	 \begin{center}
+		\@author \\[.2 in]
+		%\@fulldegs
+	 \end{center}
+	}
+	\vspace{3em}%\vfill
+	\begin{center}
+		A \@DocType\\
+                Submitted in Partial Fulfillment of the\\
+                Requirements for the Degree of\\ 
+                \@Degree\\
+                at the\\ 
+                University of Cyprus%\\
+		
+	\end{center}
+	%\vskip.5in
+	\begin{center}
+	\vfill
+								Recommended for Acceptance\\
+								by the Department of Computer Science\\
+	\@monthcom, \@copyrightyear%\the\year
+	\end{center}
+	\newpage}
+
+
+% Macro for the copyright page.
+\def\copyrightpage{%
+	\null\vfill
+        \thispagestyle{empty}
+	\begin{center}
+		\copyright~Copyright by\\[.5in]
+		\@author\\[2in]
+		All Rights Reserved\\[2in]
+		\@copyrightyear\\
+	\end{center}
+	\vfill\newpage}
+
+
+% Macro for major advisor signature.
+\long\def\sigmajor#1#2{
+	\hbox to 5.75in{\shortstack{ #1\\[1 em]}
+			\hfil 
+			\shortstack[l]{\vrule width 4.25in height 0.2pt \\ 
+			\hspace*{1.5in} #2}}}
+
+
+% Macro for associate advisor signatures.
+\long\def\sigassoc#1#2{
+	\hbox to 5.75in{\shortstack{ #1\\[1 em]}
+			\hfil 
+			\shortstack[l]{\vrule width 4.25in height 0.2pt \\ 
+			               \hspace*{1.5in} #2}}
+}
+
+
+% Macro for approval page.
+\def\approvalpage{%
+	\setcounter{page}{2}
+        \vspace*{.25in}
+	\begin{center}
+	{\Large\bf APPROVAL PAGE} \\
+	\vspace*{.1 in}
+	{\@Degree} {\@DocType} \\
+	\vspace{.3in}
+	{\bf\@title} \\
+	\vspace{.2in}
+	Presented by \\
+	\vspace{.1in}
+	\@author%, \@degs
+	\end{center}
+	\vfill
+        \vbox to\advisersheight{\unvbox\ucy@advisers}
+	\begin{center}
+	University of Cyprus\\
+	\@monthcom, \@copyrightyear%\the\year 
+	\end{center}}
+
+
+\def\beforepreface{
+	\addtocontents{toc}{\protect\tocformat{1}}
+	\pagenumbering{roman}
+	\pagestyle{plain}
+	\titlep
+	\ifcopyright\copyrightpage\else\newpage\fi
+	\approvalpage}
+\let\prematter\beforepreface
+
+
+\def\preface{
+	\pagestyle{plain}
+	\begin{center}
+	  \Large\bf PREFACE
+	\end{center}
+}
+
+
+% Macro for abstract section.
+\def\abstract{
+	\newpage
+        \ifphdform
+	  \advance\topmargin 12pt
+	  \headsep 48pt
+	  \setcounter{ucy@pagenum}{\value{page}} 	
+	  %\setcounter{page}{\value{ucy@pagenum}}
+	  \setcounter{page}{1}			 
+	  \def\ps@myheadings{\let\@mkboth\@gobbletwo
+	                     \def\@oddhead{\hfil
+					   \@author{--}\kern1pt{--}University of
+			                                 Cyprus, \@copyrightyear%\the\year
+			                   \hfil}
+			     \def\@oddfoot{}	
+	                     \let\@evenhead\@oddhead
+			     \let\@evenfoot\@oddfoot
+	                    }
+	  \pagestyle{myheadings}
+	  \thispagestyle{empty}
+	  \begin{center}
+	    {\bf\@title} \\[24 pt]
+	    \@author\\%, \@DegreeAbrv \\
+	    University of Cyprus, \@copyrightyear%\the\year
+	  \end{center}
+	  \textheight 8.5in
+	  \pagegoal 8.5in	%This line *MUST FOLLOW* the center environment
+        \fi
+        \ifmsform
+	  \pagestyle{plain}
+	     \newpage
+	     \setcounter{page}{1}
+	     \thispagestyle{empty}
+	  \begin{center}
+	    \Large\bf ABSTRACT
+	  \end{center}
+        \fi
+        \ifmaform
+	  \pagestyle{plain}
+	  \begin{center}
+	    \Large\bf ABSTRACT
+	  \end{center}
+        \fi
+	\par
+}
+\def\endabstract{			
+   \newpage
+   \setcounter{page}{\value{ucy@pagenum}}	
+}
+
+
+% Macro for acknowledgement section.
+\def\acknowledgement{
+	\newpage
+	\setcounter{page}{3}
+	\pagestyle{plain}
+        \vspace*{.25 in}
+	\begin{center}
+	{\Large\bf ACKNOWLEDGEMENTS}
+	\end{center}
+	\par
+	\vspace*{2 ex}
+}
+
+% Macro for credits section, created by Chryssis Georgiou.
+\def\credits{
+	\newpage
+	\setcounter{page}{4} %replace with 5, if abstract is two pages
+	\pagestyle{plain}
+        \vspace*{.25 in}
+	\begin{center}
+	{\Large\bf CREDITS}
+	\end{center}
+	\par
+	\vspace*{2 ex}
+}
+
+\def\prefacesection#1{%
+        \newpage
+	\chapter*{#1}
+	\addcontentsline{toc}{chapter}{#1}}
+
+  
+% Macros to format the page numbering.
+\def\ps@myheadings{\let\@mkboth\@gobbletwo
+                   \def\@oddhead{\hfil\thepage}
+		   \def\@oddfoot{}
+                   \def\@evenhead{\hfil\thepage}
+		   \def\@evenfoot{}
+                   \def\sectionmark##1{}
+		   \def\subsectionmark##1{}
+}
+
+
+% Header for Table of Contents
+\def\tableofcontents{
+  \newpage
+  \vspace{.25 in}
+  \begin{center}
+    {\Large\bf TABLE OF CONTENTS}
+  \end{center}
+  \normalsize
+  \@starttoc{toc}
+}
+
+
+% Header for List of Figures
+\def\listoffigures{
+  \newpage
+  \vspace{.25in}
+  \begin{center}
+    {\Large\bf LIST OF FIGURES}
+  \end{center}
+  \normalsize
+  \vspace*{2 em}
+  \@starttoc{lof}
+}
+
+
+% Header for List of Tables
+%\def\listoftables{
+%  \newpage
+%  \vspace{.25in}
+%  \begin{center}
+%    {\Large\bf LIST OF TABLES}
+%  \end{center}
+%  \normalsize
+%  \vspace*{2 em}
+%  \@starttoc{lot}
+%}
+
+
+\newif\if@printlof\@printloftrue
+\newif\if@printlot\@printlottrue
+
+\def\nolofpage{\@printloffalse}  \def\printlofpage{\@printloftrue}
+\def\nolotpage{\@printlotfalse}  \def\printlotpage{\@printlottrue}
+
+\def\afterpreface{
+  \thesiscontentspage
+%  \if@printlot\thesistablespage\fi
+  \if@printlof\thesisfigurespage\fi
+  \thesisbody
+}
+
+
+\def\thesiscontentspage{
+  \newpage
+  \tableofcontents
+  \newpage
+}
+\let\dissertationcontentspage\thesiscontentspage
+
+%\def\thesistablespage{
+%  \iftablespage
+%	{\addvspace{10pt}
+%	 \let\saveaddvspace=\addvspace
+%	 \def\addvspace##1{}
+%	 \listoftables
+%	 \let\addvspace=\saveaddvspace
+%	}
+%	\newpage
+% \fi
+%}
+%\let\dissertationtablespage\thesistablespage
+
+\def\thesisfigurespage{
+  \iffigurespage
+	{\addvspace{10pt}
+	 \let\saveaddvspace=\addvspace
+	 \def\addvspace##1{}
+	 \listoffigures
+	 \let\addvspace=\saveaddvspace
+	}
+	\newpage
+  \fi
+}
+\let\dissertationfigurespage\thesisfigurespage
+
+\def\thesisbody{
+  \setcounter{page}{1} 
+  \pagenumbering{arabic}
+  \pagestyle{myheadings}
+  \def\chapter{\clearpage \thispagestyle{plain}
+	       \global\@topnum\z@
+               \@afterindenttrue \secdef\@chapter\@schapter
+	      }
+}
+\let\dissertationbody\thesisbody
+
+% Header for bibliography is now centered with smaller type size.
+\def\thebibliography#1{
+	\chapter*{\begin{center}{\LARGE\bf Bibliography}\end{center}}
+	\addcontentsline{toc}{chapter}{Bibliography}
+	\list{[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}
+				\leftmargin\labelwidth
+	                        \advance\leftmargin\labelsep
+	                        \usecounter{enumi}
+			       }
+	\def\newblock{\hskip .11em plus .33em minus -.07em}
+	\sloppy\clubpenalty4000\widowpenalty4000
+	\sfcode`\.=1000\relax
+}
+\let\endthebibliography=\endlist
+
+% Redefine macro for theorem environment - now takes default font.
+\def\@begintheorem#1#2{\trivlist \item[\hskip \labelsep{\bf #1\ #2}]}
+\def\@opargbegintheorem#1#2#3{\trivlist \item[\hskip \labelsep{\bf #1\ #2\ (#3)}]}
+\def\@endtheorem{\endtrivlist}
+
+% lcaption  1.0
+% If \CapSize is set to ZERO, it will fit the caption to \hsize
+% (the width of the surrounding text)
+% The command \smartcap will make \caption act like \lcaption. It
+% should be used only once.
+\newdimen\CapSize\CapSize\z@
+
+\long\def\@lmakecaption#1#2{\vskip 10pt \setbox\@tempboxa\hbox{#1:\ }
+ \@tempdima\hsize\advance\@tempdima-\wd\@tempboxa
+ \ifdim\CapSize=\z@\else \ifdim\@tempdima>\CapSize \@tempdima\CapSize\fi\fi
+ \setbox\@tempboxa\hbox{#1: #2}
+ \ifdim\wd\@tempboxa<\hsize\hfil #1: #2\hfil\par\else
+ \hbox to\hsize{\hfil #1: \parbox[t]\@tempdima{#2}\hfil} 
+ \fi}
+\def\lcaption{\let\@makecaption\@lmakecaption\caption}
+\def\smartcap{\def\caption{\let\@makecaption\@lmakecaption
+              \refstepcounter\@captype \@dblarg{\@caption\@captype}}}

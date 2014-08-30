@@ -1,0 +1,141 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage{ucythesis}
+%\usepackage{latexsym}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\begin{document}
+%\phddissertation %\msthesis for master degree
+\msthesis
+
+\title{DIGITAL MATTING AND COMPOSITING}
+\author{Savvas Christodoulou}
+%\fulldegs{}
+%\fulldegs{M.S. major, university, year\\\vspace{0.5em}
+%B.S., major, university, year}
+%\degs{B.Sc.}
+%\degs{M.S., B.S.}
+\monthcom{June} %\month of completion
+\majoradviser{Yiorgos Chrysanthou}
+\associateadviser{Constantinos Pattichis}
+\associateadviser{Paris Kaimakis}
+%\associateadviser{Committee Member's Name}
+%\associateadviser{Committee Member's Name}
+\copyrightyear{2014} %\basically the completion year
+
+\begin{abstract}
+Digital image matting refers to the area of computer vision that attempts to solve the problem of separating the foreground from the background and compositing it to and new background. Traditional image segmentation algorithms make a hard segmentation of multiple regions in an image, whereas in alpha matting fuzzy regions are taken into account as mixed regions and fractional values are estimated to form an alpha matte that is used for compositing. The standard method for matting used in the industry is blue screen matting, where the background is monochrome, usually green or blue. Recent research focuses on solving the problem of natural image matting, where the background consists of a variety of colours. Natural image matting is an ill-posed problem, where for a given image we have multiple solutions. The under constrained nature of the problem requires prior input, usually a user provided trimap or a set of scribbles. 
+Bayesian matting was a first attempt to solve the matting problem, which uses a Bayesian framework, and another basic approach is Closed Form matting where the Colour Line Model is assumed to estimate alpha and the notation of a Matting Laplacian Matrix is introduced. Other methods include consideration of pixel affinities and image gradient, use of depth or texture information as priors, use of more sophisticated sampling methods, and the use of better classification algorithms. Matting has been extended to video, where trimaps are automatically generated and temporal coherence of alpha values is considered. Other research approaches consider the use of custom hardware to solve the matting problem. 
+In this thesis I present the work done to develop a matting system that consists of a new matting algorithm and the extension of it to an application with the use of Microsoft’s Kinect sensor. Execution times are promising for a real time application using GPU hardware. Future work consists of the use of the new Kinect 2 sensor and consideration of illumination sources in natural images to improve the matting and compositing method. 
+\newline
+\centerline{Savvas Christodoulou -- University of Cyprus, 2014}
+
+\end{abstract}
+
+\beforepreface %\required
+
+\acknowledgement 
+I would first like to thank my fellow student Mr. George Georgakis that was involved in the early stages of the project that this thesis is based upon. His excellent knowledge in the areas of computer vision and image processing along with his exceptional analytical and programming skills were very helpful in development of many of the ideas during the experimental process. 
+I would also like to thank lab assistant Mr. Ioannis Konstantinou, an expert in the areas of image/video processing and computer vision, that offered guidance and recommended many ideas. 
+Last and most importantly I would like to thank my supervisor Dr. Yiorgos Chrysanthou for the initial motivation and conceptualization the whole project and his consultation during various phases of the research process.
+
+%\credits %\ Publications that lead to this thesis (if any)
+
+\afterpreface %\required
+
+%chapers and sections%%%%%%%%%
+
+\input{Chapter1/chapter1}
+\input{Chapter2/chapter2}
+\input{Chapter3/chapter3}
+\input{Chapter4/chapter4}
+\input{Chapter5/chapter5}
+\input{Chapter6/chapter6}
+\input{Chapter7/chapter7}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\postmatter
+
+\bibliographystyle{plain} 
+\begin{thebibliography}{100}  % bibtex can be used instead
+
+\bibitem{compositing} Porter, Thomas and Duff, Tom. Compositing digital images. \textit{ACM Siggraph Computer Graphics}, 18(3), 253-259.
+
+\bibitem{blue} Smith, Alvy Ray and Blinn, James F. Blue screen matting. in \textit{Proceedings of the 23rd annual conference on Computer graphics and interactive techniques}, (1996), ACM, 259-268.
+
+\bibitem{environment} Zongker, D. E., Werner, D. M., Curless, B. and Salesin. D. H, Environment matting and compositing. in \textit{Proceedings of the 26th annual conference on Computer graphics and interactive techniques}, (1999), ACM Press/Addison-Wesley Publishing Co, 205-214.
+
+\bibitem{bayesian} Chuang, Y., Curless, B., Salesin, D. H. and Szeliski, R. A Bayesian approach to digital matting. in \textit{Proceedings of IEEE CVPR}, (2001), IEEE Computer Society, 264-271.
+
+\bibitem{closedform} Levin, Anat, Dani Lischinski, and Yair Weiss. A closed-form solution to natural image matting. \textit{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 30(2), 228-242.
+
+\bibitem{spectral} Levin, A., Rav Acha, A., Lischinski, D. Spectral matting. \textit{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 30(10), 1699-1712.
+
+\bibitem{poisson} J Sun, J Jia, CK Tang, HY Shum, Poisson matting. \textit{ACM Transactions on Graphics (ToG)}, 23(3), 315-321.
+
+\bibitem{iterativeoptimization} J Wang, MF Cohen, An iterative optimization approach for unified image segmentation and matting. in \textit{Tenth IEEE International Conference on Computer Vision}, (2005), IEEE, 936-943.
+
+\bibitem{robust} J Wang, MF Cohen, Optimized Colour Sampling for Robust Matting. in \textit{IEEE Conference on Computer Vision and Pattern Recognition}, (2007), IEEE, 1-8.
+
+\bibitem{softscissors} Wang, J., Agrawala, M., Cohen, M. F. Soft scissors: an interactive tool for realtime high quality matting. \textit{ACM Transactions on Graphics (TOG)}, 26(3), 9.
+
+\bibitem{shared} Gastal, E. S., Oliveira, M. M. Shared Sampling for Real Time Alpha Matting. \textit{Computer Graphics Forum}, 29(2), 575-584.
+
+\bibitem{benchmark} Rhemann, C., Rother, C., Wang, J., Gelautz, M., Kohli, P., Rott, P. A perceptually motivated online benchmark for image matting. in \textit{IEEE Conference on Computer Vision and Pattern Recognition}, (2009), IEEE, 1826-1833.
+
+\bibitem{nonlocal} Lee, P., Wu, Y. Nonlocal matting. in \textit{IEEE Conference on Computer Vision and Pattern Recognition}, (2011), IEEE, 2193-2200.
+
+\bibitem{knn} Chen, Q., Li, D., Tang, C. K. KNN matting. in \textit{IEEE Conference on Computer Vision and Pattern Recognition}, (2012), IEEE, 869-876.
+
+\bibitem{texture} Shahrian, E., Rajan, D. Weighted color and texture sample selection for image matting. in \textit{IEEE Conference on Computer Vision and Pattern Recognition}, (2012), IEEE, 718-725.
+
+\bibitem{comprehensive} Shahrian, E., Rajan, D., Price, B., Cohen, S. Improving Image Matting Using Comprehensive Sampling Sets. in \textit{IEEE Conference on Computer Vision and Pattern Recognition}, 2013, IEEE, 636-643.
+
+\bibitem{video} Chuang, Y. Y., Agarwala, A., Curless, B., Salesin, D. H., Szeliski, R. Video matting of complex scenes. \textit{ACM Transactions on Graphics (TOG)}, 21(3), 243-248.
+
+\bibitem{flow} Black, M. J., Anandan, P. The robust estimation of multiple motions: Parametric and piecewise-smooth flow fields. \textit{Computer vision and image understanding}, 63(1), 75-104.
+
+\bibitem{mosaic} Szeliski, R., Shum, H. Y. Creating full view panoramic image mosaics and environment maps. in \textit{Proceedings of the 24th annual conference on Computer graphics and interactive techniques}, (1997), ACM Press/Addison-Wesley Publishing Co, 251-258.
+
+\bibitem{defocus} McGuire, M., Matusik, W., Pfister, H., Hughes, J. F., Durand, F. Defocus video matting. \textit{ACM Transactions on Graphics (TOG)}, 24(3), 567-576.
+
+\bibitem{flash} Sun, J., Li, Y., Kang, S. B., Shum, H. Y. Flash matting. \textit{ACM Transactions on Graphics (TOG)}, 25(3), 772-778.
+
+\bibitem{cameraarray} Joshi, N., Matusik, W., Avidan, S. Natural video matting using camera arrays. \textit{ACM Transactions on Graphics (TOG)}, 25(3), 779-786.
+
+\bibitem{tof} Zhu, J., Liao, M., Yang, R., Pan, Z. Joint depth and alpha matte optimization via fusion of stereo and time-of-flight sensor. in \textit{IEEE Conference on Computer Vision and Pattern Recognition}, (2009), IEEE, 453-460.
+
+\bibitem{realtimetof} Wang, L., Gong, M., Zhang, C., Yang, R., Zhang, C., Yang, Y. H. Automatic real-time video matting using time-of-flight camera and multichannel Poisson equations. \textit{International journal of computer vision}, 97(1), 104-121.
+
+\bibitem{watershed} Beucher, S., Meyer, F. The morphological approach to segmentation: the watershed transformation. \textit{OPTICAL ENGINEERING-NEW YORK-MARCEL DEKKER INCORPORATED}, 34, 433-433.
+
+\bibitem{grabcut} Rother, C., Kolmogorov, V., Blake, A. Grabcut: Interactive foreground extraction using iterated graph cuts. \textit{ACM Transactions on Graphics (TOG)}, 23(3),  309-314.
+
+\bibitem{lbp} Ojala, T., Pietikainen, M., Maenpaa, T. Multiresolution gray-scale and rotation invariant texture classification with local binary patterns. \textit{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 24(7), 971-987.
+
+\bibitem{kinectaccuracy} Khoshelham, K. Accuracy analysis of kinect depth data. in \textit{ISPRS workshop laser scanning}, 38(5), W12.
+
+\bibitem{visualeffects} Radke, Richard J. \textit{Computer Vision for Visual Effects}. Cambridge University Press, 2012.
+
+\bibitem{algorithmsapplications} Szeliski, Richard. \textit{Computer vision: algorithms and applications}. Springer, 2010.
+
+\bibitem{mattingsurvey} Wang, J., Cohen, M. F. \textit{Image and video matting: a survey}. Now Publishers Inc, 2008
+
+\bibitem{mattingtutorial} http://www.alphamatting.com/ICCV2013\_tutorial/ (accessed May 2014).
+
+\bibitem{kinectscomparison} http://channel9.msdn.com/coding4fun/kinect/Kinect-v1-vs-Kinect-v2-RGB-and-Depth, (accessed May 2014)
+
+\bibitem{fig1} http://www.juew.org/projects/RobustMatting/index.html, (accessed May 2014)
+
+\end{thebibliography}
+
+\input{AppendixA/AppendixA}
+\input{AppendixB/AppendixB}
+
+\end{document}
